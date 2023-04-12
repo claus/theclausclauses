@@ -9,7 +9,7 @@
 <meta property="og:image" content="https://theclausclauses.com/stuff/transparent-video-for-web-2023/share.png">
 <style>
     html { font-size: 62.5%; }
-    body { counter-reset: section; font-size: 1.6rem; padding: 1rem 1rem 5rem; }
+    body { counter-reset: section; font-size: 1.6rem; padding: 1rem; }
     *, *::before, *::after { box-sizing: border-box; }
     h2::before { counter-increment: section; content: counter(section) ". "; }
     pre { background: #eee; padding: 1rem; max-width: 100%; overflow: auto; }
@@ -17,6 +17,7 @@
     p code { padding: 0 0.5rem; }
     img { max-width: min(100rem, 100%); }
     video { max-width: min(50rem, 100%); height: auto; padding: 1rem; background-image: url("/images/transparent.png"); background-size: cover; background-position: top left; }
+    footer { margin: 6rem 0 2rem; }
 </style>
 </head>
 
@@ -46,7 +47,7 @@
 <h2>Use <a href="https://www.apple.com/final-cut-pro/compressor/" target="_blank">Compressor</a> to create a .mov (HEVC H.265 codec)</h2>
 <ol>
     <li>
-        <p>Add the image sequence: "File" &gt; "Add Image Sequence..."</p>
+        <p>Add the image sequence: "File" → "Add Image Sequence..."</p>
         <p>Manually set the target frame rate and click "Add"</p>
         <p><a href="01-add-image-sequence.png" target="_blank"><img src="01-add-image-sequence.png" /></a></p>
     </li>
@@ -61,7 +62,7 @@
     </li>
     <li>
         <p>Select a preset</p>
-        <p>Pick "YouTube &amp; Facebook" &gt; "Up to 4K". Click "OK". </p>
+        <p>Pick "YouTube &amp; Facebook" → "Up to 4K". Click "OK". </p>
         <p><a href="03-job-preset.png" target="_blank"><img src="03-job-preset.png" /></a></p>
     </li>
     <li>
@@ -93,5 +94,6 @@
     <source src="video.mov" type="video/quicktime">
     <source src="video.webm" type="video/webm">
 </video>
+<footer>→ <a href="/">back to index</a></footer>
 </body>
 </html>
