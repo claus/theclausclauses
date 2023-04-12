@@ -1,0 +1,91 @@
+<html>
+<head>
+<title>Transparent Video For the Web in 2023</title>
+<style>
+html { font-size: 62.5%; }
+body { counter-reset: section; font-size: 1.6rem; padding: 1rem 1rem 5rem; }
+h2::before { counter-increment: section; content: counter(section) ". "; }
+pre { background: #eee; padding: 1rem; width: fit-content; }
+code { background: #eee; }
+p code { padding: 0 0.5rem; }
+img { max-width: min(100rem, 100%); }
+video { max-width: min(50rem, 100%); height: auto; padding: 1rem; background: #7d8964; }
+</style>
+<meta property="og:title" content="Transparent Video For Web">
+<meta property="og:image" content="https://theclausclauses.com/aBoyNamedClausWithACatOnHisShoulder.png">
+</head>
+<body>
+<h1>Transparent Video For the Web in 2023</h1>
+<p>We're showing how to create transparent videos from an image sequence of transparent PNGs for use in HTML.</p>
+<p>Support for transparent video was added in Safari 11 (macOS High Sierra and iOS 11) in 2017 via the HEVC H.265 codec.</p>
+<p>All other browsers support transparent VP9.</p>
+<h2>Use ffmpeg to create a .webm (VP9 codec)</h2>
+<p>Easy peasy, ffmpeg does that for us:</p>
+<pre><code>ffmpeg \
+    -r 20 \
+    -f image2 \
+    -start_number 0 \
+    -i ./images_%05d.png \
+    -c:v libvpx-vp9 \
+    -pix_fmt yuva420p \
+    video.webm
+</code></pre>
+<p><code>-r</code> sets the frame rate (here 20 fps)<br></p>
+<p><code>-f image2</code> selects the input file demuxer. It "reads from a list of image files specified by a pattern", see below.</p>
+<p><code>-start_number 0</code> sets the first frame number. If your image sequence starts with a number other than 0, you'll need to set this to that number. Otherwise you can omit this option.<br></p>
+<p><code>-i ./images_%05d.png</code> sets the path to the image sequence. In place of the numbers in the filename, you can use <code>%d</code> for a single digit, <code>%3d</code> for three digits, <code>%03d</code> for three zero-padded digits, etc. You get the idea. Here, <code>images_%05d.png</code> would match files <code>images_00000.png</code>, <code>images_00001.png</code>, and so on.<br></p>
+<p><code>--c:v libvpx-vp9</code> sets the video codec to VP9.<br></p>
+<p><code>-pix_fmt yuva420p</code> sets the pixel format to yuva420p. This is the only pixel format that supports transparency in VP9.<br></p>
+<p><code>video.webm</code> is the output filename.</p>
+<h2>Use <a href="https://www.apple.com/final-cut-pro/compressor/" target="_blank">Compressor</a> to create a .mov (HEVC H.265 codec)</h2>
+<ol>
+    <li>
+        <p>Add the image sequence: "File" &gt; "Add Image Sequence..."</p>
+        <p>Manually set the target frame rate and click "Add"</p>
+        <p><a href="01-add-image-sequence.png" target="_blank"><img src="01-add-image-sequence.png" /></a></p>
+    </li>
+    <li>
+        <p>Add a job</p>
+        <ol>
+            <li>Make sure you have the Start time set to 00:00:00:00.</li>
+            <li>Set the frame rate to "Custom" and enter your target frame rate.</li>
+            <li>Click "Add".</li>
+        </ol>
+        <p><a href="02-job-settings.png" target="_blank"><img src="02-job-settings.png" /></a></p>
+    </li>
+    <li>
+        <p>Select a preset</p>
+        <p>Pick "YouTube &amp; Facebook" &gt; "Up to 4K". Click "OK". </p>
+        <p><a href="03-job-preset.png" target="_blank"><img src="03-job-preset.png" /></a></p>
+    </li>
+    <li>
+        <p>General Settings</p>
+        <p>Set "Format" to "Video". We don't want an audio track.</p>
+        <p><a href="04-general-settings.png" target="_blank"><img src="04-general-settings.png" /></a></p>
+    </li>
+    <li>
+        <p>Video Settings</p>
+        <ol>
+            <li>Set "Frame size" to "Automatic".</li>
+            <li>Set "Frame rate" to "Automatic" and enter the target frame rate.</li>
+            <li>Set "Codec" to "HEVC". You may set "Encode type" to "Slower". Or not, i don't know.</li>
+            <li>Set "Avg. Data rate" to "Custom". You'll have to experiment with both the kbps value and with the Quality slider below. See which values give you minimum file size and maximum quality. The values in the following screenshot might or might not give you good results. Tweak them as needed. This is a bit of trial and error.</li>
+            <li>Check the "Preserve alpha" option.</li>
+            <li>When done, click "Start Batch" and the conversion will begin.</li>
+        </ol>
+        <p><a href="05-video-settings.png" target="_blank"><img src="05-video-settings.png" /></a></p>
+    </li>
+</ol>
+<h2>Embedding the videos</h2>
+<pre><code>&lt;video width="1083" height="245" autoplay muted loop playsinline>
+    &lt;source src="video.mov" type="video/quicktime">
+    &lt;source src="video.webm" type="video/webm">
+&lt;/video></code></pre>
+<p>It is important that the <code>video.mov</code> is listed first, because Safari <em>does</em> support the webm container format and the VP9 codec, but <em>not transparent</em> VP9, so it would just go ahead and play that but ignore the alpha channel. If <code>video.mov</code> is listed first, Safari will play that instead. All other browsers do not support the mov container format, so they ignore it and load the <code>video.webm</code> instead.</p>
+<h2>Result</h2>
+<video width="1083" height="245" autoplay muted loop playsinline>
+    <source src="video.mov" type="video/quicktime">
+    <source src="video.webm" type="video/webm">
+</video>
+</body>
+</html>
