@@ -43,9 +43,9 @@
     <li><code>-r</code> sets the frame rate (here 20 fps).</li>
     <li><code>-f image2</code> selects the input file demuxer. It "reads from a list of image files specified by a pattern", see below.</li>
     <li><code>-start_number 0</code> sets the first frame number. If your image sequence starts with a number other than 0, you'll need to set this to that number. Otherwise you can omit this option.</li>
-    <li><code>-i ./images_%05d.png</code> sets the path to the image sequence. In place of the numbers in the filename, you can use <code>%d</code> for a single digit, <code>%3d</code> for three digits, <code>%03d</code> for three zero-padded digits, etc. You get the idea. Here, <code>images_%05d.png</code> would match files <code>images_00000.png</code>, <code>images_00001.png</code>, and so on.</li>
+    <li><code>-i ./images_%05d.png</code> sets the path to the image sequence. In place of the numbers in the filename, you can use for example <code>%05d</code> for five zero-padded digits, etc. You get the idea. Here, <code>images_%05d.png</code> would match files <code>images_00000.png</code>, <code>images_00001.png</code>, and so on and so forth.</li>
     <li><code>--c:v libvpx-vp9</code> sets the video codec to VP9.</li>
-    <li><code>-pix_fmt yuva420p</code> sets the pixel format to yuva420p. This is the only pixel format that supports transparency in VP9.</li>
+    <li><code>-pix_fmt yuva420p</code> sets the pixel format to yuva420p. This adds the alpha channel that makes things transparent.</li>
     <li><code>video.webm</code> is the output filename.</li>
 </ul>
 <p>This will cover most browsers, but not Safari.</p>
