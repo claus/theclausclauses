@@ -8,14 +8,15 @@
 <meta property="og:description" content="How to create transparent videos from an image sequence of transparent PNGs for use in HTML.">
 <meta property="og:image" content="https://theclausclauses.com/stuff/transparent-video-for-web-2023/share.png">
 <style>
-html { font-size: 62.5%; }
-body { counter-reset: section; font-size: 1.6rem; padding: 1rem 1rem 5rem; }
-h2::before { counter-increment: section; content: counter(section) ". "; }
-pre { background: #eee; padding: 1rem; width: fit-content; }
-code { background: #eee; }
-p code { padding: 0 0.5rem; }
-img { max-width: min(100rem, 100%); }
-video { max-width: min(50rem, 100%); height: auto; padding: 1rem; background: #7d8964; }
+    html { font-size: 62.5%; }
+    body { counter-reset: section; font-size: 1.6rem; padding: 1rem 1rem 5rem; }
+    *, *::before, *::after { box-sizing: border-box; }
+    h2::before { counter-increment: section; content: counter(section) ". "; }
+    pre { background: #eee; padding: 1rem; max-width: 100%; overflow: auto; }
+    code { background: #eee; }
+    p code { padding: 0 0.5rem; }
+    img { max-width: min(100rem, 100%); }
+    video { max-width: min(50rem, 100%); height: auto; padding: 1rem; background-image: url("/images/transparent.png"); background-size: cover; background-position: top left; }
 </style>
 </head>
 
@@ -26,7 +27,7 @@ video { max-width: min(50rem, 100%); height: auto; padding: 1rem; background: #7
 <p>All other browsers support transparent VP9.</p>
 <h2>Use ffmpeg to create a .webm (VP9 codec)</h2>
 <p>Easy peasy, ffmpeg does that for us:</p>
-<pre><code>ffmpeg \
+<div><pre><code>ffmpeg \
     -r 20 \
     -f image2 \
     -start_number 0 \
@@ -34,7 +35,7 @@ video { max-width: min(50rem, 100%); height: auto; padding: 1rem; background: #7
     -c:v libvpx-vp9 \
     -pix_fmt yuva420p \
     video.webm
-</code></pre>
+</code></pre></div>
 <p><code>-r</code> sets the frame rate (here 20 fps)<br></p>
 <p><code>-f image2</code> selects the input file demuxer. It "reads from a list of image files specified by a pattern", see below.</p>
 <p><code>-start_number 0</code> sets the first frame number. If your image sequence starts with a number other than 0, you'll need to set this to that number. Otherwise you can omit this option.<br></p>
@@ -82,10 +83,10 @@ video { max-width: min(50rem, 100%); height: auto; padding: 1rem; background: #7
     </li>
 </ol>
 <h2>Embedding the videos</h2>
-<pre><code>&lt;video width="1083" height="245" autoplay muted loop playsinline>
+<div><pre><code>&lt;video width="1083" height="245" autoplay muted loop playsinline>
     &lt;source src="video.mov" type="video/quicktime">
     &lt;source src="video.webm" type="video/webm">
-&lt;/video></code></pre>
+&lt;/video></code></pre></div>
 <p>It is important that the <code>video.mov</code> is listed first, because Safari <em>does</em> support the webm container format and the VP9 codec, but <em>not transparent</em> VP9, so it would just go ahead and play that but ignore the alpha channel. If <code>video.mov</code> is listed first, Safari will play that instead. All other browsers do not support the mov container format, so they ignore it and load the <code>video.webm</code> instead.</p>
 <h2>Result</h2>
 <video width="1083" height="245" autoplay muted loop playsinline>
