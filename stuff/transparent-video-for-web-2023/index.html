@@ -32,7 +32,7 @@
 <p>Support for transparent video was added in Safari 11 (macOS High Sierra and iOS 11) in 2017 via the HEVC H.265 codec.</p>
 <p>All other browsers support transparent VP9.</p>
 <h2>Use ffmpeg to create a .webm (VP9 codec)</h2>
-<p><em>Note: Install ffmpeg on Macs by running <code>brew install ffmpeg</code> (it installs everything you need). On Linux you probably do <code>apt-get bla bla something something</code> (make sure it's compiled with the VP9 codec or whatever). No idea what you have to do on Windows, but you're smart, you'll figure it out.</em></p>
+<p><em>Note: Install ffmpeg on Macs by running <code>brew install ffmpeg</code> (it installs everything you need). On Linux you probably do <code>apt-get something something</code> (make sure it's compiled with the VP9 codec or whatever). No idea what you have to do on Windows, but you're smart, you'll figure it out!</em></p>
 <p>Easy peasy:</p>
 <div><pre><code>ffmpeg \
     -r 20 \
@@ -55,7 +55,7 @@
 <p>This will cover most browsers, but not Safari.</p>
 <p>For Safari, you need to...</p>
 <h2>Use <a href="https://www.apple.com/final-cut-pro/compressor/" target="_blank">Compressor</a> to create a .mov (HEVC H.265 codec)</h2>
-<p><em>Note: There are other tools that will create HEVC H.265 for you, it's just that i use Compressor because it kinda works best for me. The drawback is that it costs 50 bucks. Also, you can probably also pack HEVC H.265 into a mp4 container.</em></p>
+<p><em>Note: There are other tools that will create HEVC H.265 for you, it's just that i use Compressor because it kinda works best for me. The drawback is that it costs 50 bucks.</em></p>
 <ol>
     <li>
         <p>Add the image sequence: "File" → "Add Image Sequence..."</p>
@@ -90,7 +90,7 @@
     </li>
     <li>
         <p>General Settings</p>
-        <p>Set "Format" to "Video". You don't want an audio track. Or don't if you really want an audio track, who am i to tell you what you want. You probably don't want it though.</p>
+        <p>Set "Format" to "Video". You probably don't want an audio track.</p>
         <p>
             <a href="04-general-settings.png" target="_blank" aria-label="Load 'general settings' screenshot in a new tab">
                 <img src="04-general-settings.png" width="2784" height="2012" alt="" />
@@ -119,7 +119,7 @@
     &lt;source src="video.mov" type="video/quicktime">
     &lt;source src="video.webm" type="video/webm">
 &lt;/video></code></pre></div>
-<p>It is important that the <code>video.mov</code> is listed first, because Safari <em>does</em> support the webm container format and the VP9 codec, but <em>not transparent</em> VP9, so it would just go ahead and play that but ignore the alpha channel. If <code>video.mov</code> is listed first, Safari will play that instead. All other browsers do not support the mov container format, so they ignore it and load the <code>video.webm</code> instead.</p>
+<p>It is important that the <code>video.mov</code> is listed first, because Safari <em>does</em> support the webm container format and the VP9 codec, but <em>not transparent</em> VP9, so it would just go ahead and play <code>video.webm</code>, but ignore the alpha channel. If <code>video.mov</code> is listed first, Safari will play that instead. All other browsers do not support the mov container format, so they ignore it and load <code>video.webm</code> instead.</p>
 <h2>Admire the result</h2>
 <video width="1083" height="245" autoplay muted loop playsinline>
     <source src="video.mov" type="video/quicktime">
