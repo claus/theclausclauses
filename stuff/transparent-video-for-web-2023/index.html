@@ -54,14 +54,14 @@
 </ul>
 <p>This will cover most browsers, but not Safari.</p>
 <p>For Safari, you need to...</p>
-<h2>Use <a href="https://www.apple.com/final-cut-pro/compressor/" target="_blank">Compressor</a> to create a .mov (HEVC H.265 codec)</h2>
+<h2>Use <a href="https://www.apple.com/final-cut-pro/compressor/">Compressor</a> to create a .mov (HEVC H.265 codec)</h2>
 <p><em>Note: There are other tools that will create HEVC H.265 for you, it's just that i use Compressor because it kinda works best for me. The drawback is that it costs 50 bucks.</em></p>
 <ol>
     <li>
         <p>Add the image sequence: "File" → "Add Image Sequence..."</p>
         <p>Manually set the target frame rate and click "Add"</p>
         <p>
-            <a href="01-add-image-sequence.png" target="_blank" aria-label="Load 'add image sequence' screenshot in a new tab">
+            <a href="01-add-image-sequence.png" aria-label="Load 'add image sequence' screenshot in a new tab">
                 <img src="01-add-image-sequence.png" width="2784" height="2012" alt="" />
             </a>
         </p>
@@ -74,7 +74,7 @@
             <li>Click "Add".</li>
         </ol>
         <p>
-            <a href="02-job-settings.png" target="_blank" aria-label="Load 'job settings' screenshot in a new tab">
+            <a href="02-job-settings.png" aria-label="Load 'job settings' screenshot in a new tab">
                 <img src="02-job-settings.png" width="2784" height="2012" alt="" />
             </a>
         </p>
@@ -83,7 +83,7 @@
         <p>Select a preset</p>
         <p>Pick "YouTube &amp; Facebook" → "Up to 4K". Click "OK". </p>
         <p>
-            <a href="03-job-preset.png" target="_blank" aria-label="Load 'job preset' screenshot in a new tab">
+            <a href="03-job-preset.png" aria-label="Load 'job preset' screenshot in a new tab">
                 <img src="03-job-preset.png" width="2784" height="2012" alt="" />
             </a>
         </p>
@@ -92,7 +92,7 @@
         <p>General Settings</p>
         <p>Set "Format" to "Video". You probably don't want an audio track.</p>
         <p>
-            <a href="04-general-settings.png" target="_blank" aria-label="Load 'general settings' screenshot in a new tab">
+            <a href="04-general-settings.png" aria-label="Load 'general settings' screenshot in a new tab">
                 <img src="04-general-settings.png" width="2784" height="2012" alt="" />
             </a>
         </p>
@@ -108,7 +108,7 @@
             <li>When done, click "Start Batch" and the conversion will begin.</li>
         </ol>
         <p>
-            <a href="05-video-settings.png" target="_blank" aria-label="Load 'video settings' screenshot in a new tab">
+            <a href="05-video-settings.png" aria-label="Load 'video settings' screenshot in a new tab">
                 <img src="05-video-settings.png" width="2784" height="2012" alt="" />
             </a>
         </p>
@@ -119,7 +119,13 @@
     &lt;source src="video.mov" type="video/quicktime">
     &lt;source src="video.webm" type="video/webm">
 &lt;/video></code></pre></div>
-<p>It is important that the <code>video.mov</code> is listed first, because Safari <em>does</em> support the webm container format and the VP9 codec, but <em>not transparent</em> VP9, so it would just go ahead and play <code>video.webm</code>, but ignore the alpha channel. If <code>video.mov</code> is listed first, Safari will play that instead. All other browsers do not support the mov container format, so they ignore it and load <code>video.webm</code> instead.</p>
+<p>
+    It is important that the <code>video.mov</code> is listed first.
+    If <code>video.webm</code> was listed first, Safari would happily play that, because it <em>does</em> support the webm container format and the VP9 codec.
+    However, Safari does currently <em>not</em> support <em>transparent VP9</em>. It would ignore the alpha channel, and we don't want that.
+    If <code>video.mov</code> is listed first, Safari will play that instead in all its transparent glory.
+    Only Safari supports the Quicktime container format, so all other browsers ignore it and load <code>video.webm</code> instead.
+</p>
 <h2>Admire the result</h2>
 <video width="1083" height="245" autoplay muted loop playsinline>
     <source src="video.mov" type="video/quicktime">
