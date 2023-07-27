@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>The Claus Clauses</title>
+        <link>https://theclausclauses.com/</link>
+        <description>Occasionally insightful</description>
+        <atom:link href="https://theclausclauses.com/rss.xml" rel="self" type="application/rss+xml" />
+        <image>
+            <title>The Claus Clauses</title>
+            <url>https://theclausclauses.com/images/aBoyNamedClausWithACatOnHisShoulder.png</url>
+            <link>https://theclausclauses.com/</link>
+        </image>
+        <lastBuildDate>Tue, 11 Apr 2023 08:00:00 GMT</lastBuildDate>
+        <item>
+            <title>Transparent Video For the Web in 2023</title>
+            <link>https://theclausclauses.com/stuff/transparent-video-for-web-2023</link>
+            <guid>https://theclausclauses.com/stuff/transparent-video-for-web-2023</guid>
+            <description>We're showing how to create transparent videos from an image sequence of transparent PNGs for use in HTML.</description>
+            <pubDate>Tue, 11 Apr 2023 08:00:00 GMT</pubDate>
+        </item>
+    </channel>
+</rss>
