@@ -3,12 +3,11 @@
 <head>
 <meta charset="utf-8" />
 <title>Split Text and the Vanishing Kerning</title>
-<base href="https://theclausclauses.com/stuff/split-text-and-the-vanishing-kerning/" target="_blank">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="description" content="">
 <meta property="og:title" content="Split Text and the Vanishing Kerning">
 <meta property="og:description" content="">
-<meta property="og:image" content="https://theclausclauses.com/stuff/split-text-and-the-vanishing-kerning/share.png">
+<meta property="og:image" content="https://theclausclauses.com/stuff/split-text-and-the-vanishing-kerning/share.jpg">
 <style>
     html { font-size: 62.5%; }
     body { counter-reset: section; font-size: 1.6rem; padding: 1rem; }
@@ -75,7 +74,7 @@
 <p>
     Turns out, <strong>browsers nope out of kerning as soon as adjacent characters have different
     font styles applied to them</strong>. That's Chrome and Firefox. Safari nopes out no matter
-    what<a href="#footnote1" aria-label="Footnote 1" target="_self">1</a>.
+    what<a href="#footnote1" aria-label="Footnote 1">1</a>.
     And it makes sense.
     If you have a character pair where one of them is <code>1em</code> high and the other
     <code>3em</code>, what kerning value should the browser apply?
@@ -93,7 +92,7 @@
 <p>
     That becomes a real problem when using text splitters like
     <a href="https://gsap.com/docs/v3/Plugins/SplitText/" target="_blank">GSAP's SplitText</a>.
-    In <a href="https://codepen.io/GreenSock/pen/pEKYVz">this official GSAP SplitText demo</a>,
+    In <a href="https://codepen.io/GreenSock/pen/pEKYVz" target="_blank">this official GSAP SplitText demo</a>,
     first click the "chars" button, and then the "revert" button. The former splits the text and
     kerning is lost. The latter restores the original markup and kerning is applied again.
 </p>
@@ -302,10 +301,10 @@ Array.from(segmenter.segment('🏳️‍🌈'), ({ segment }) => segment)
         <h1>Metadata</h1>
     </header>
     <p>
-        All the words above were written (and the screenshots screenshot) on XXXXXX NNth, 2023 without the help of any AIs, and are licensed under the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a> unless otherwise stated.
+        All the words above were written (and the screenshots screenshot) on XXXXXX NNth, 2023 without the help of any AIs, and are licensed under the <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">Creative Commons Attribution 4.0 International license</a> unless otherwise stated.
         This website does not track you. The source code of this website is available on <a href="https://github.com/claus/theclausclauses" target="_self">Github</a>.
-        Please direct your complaints at <a href="https://mastodon.com.br/@claus" target="_self">@claus@mastodon.com.br</a> or <a href="https://chaos.social/@claus" target="_self">@claus@chaos.social</a>. If that doesn't work for you, you can go oldschool and email me at <a href="mailto:w@hle.rs">w@hle.rs</a>.
-        Here's a RSS feed: <a href="/rss.xml" aria-label="Link to RSS Feed"><img class="rss" src="/images/rss.svg" aria-hidden /></a>
+        Please direct your complaints at <a href="https://mastodon.com.br/@claus">@claus@mastodon.com.br</a> or <a href="https://chaos.social/@claus">@claus@chaos.social</a>. If that doesn't work for you, you can go oldschool and email me at <a href="mailto:w@hle.rs">w@hle.rs</a>.
+        Here's a RSS feed: <a href="/rss.xml" aria-label="Link to RSS Feed" target="_blank"><img class="rss" src="/images/rss.svg" aria-hidden /></a>
     </p>
 </aside>
 
