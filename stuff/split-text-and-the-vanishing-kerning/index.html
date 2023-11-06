@@ -75,7 +75,7 @@
 <p>
     Turns out, <strong>browsers nope out of kerning as soon as adjacent characters have different
     font styles applied to them</strong>. That's Chrome and Firefox. Safari nopes out no matter
-    what<a href="#footnote1" aria-label="Footnote 1">1</a>.
+    what<a href="#footnote1" aria-label="Footnote 1" target="_self">1</a>.
     And it makes sense.
     If you have a character pair where one of them is <code>1em</code> high and the other
     <code>3em</code>, what kerning value should the browser apply?
@@ -110,6 +110,9 @@
 
 <section>
 <h2 id="intermission">Intermission</h2>
+<p>
+
+</p>
 <p>
     Before we even start, we have to look into how to split a string of text into individual
     characters in JavaScript. You might think that this is trivial, but oh lordy.
