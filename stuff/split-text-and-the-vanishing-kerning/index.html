@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Split Text and the Vanishing Kerning</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="description" content="">
+<meta property="og:title" content="Split Text and the Vanishing Kerning">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://theclausclauses.com/stuff/split-text-and-the-vanishing-kerning/share.png">
+<style>
+    html { font-size: 62.5%; }
+    body { counter-reset: section; font-size: 1.6rem; padding: 1rem; }
+    a[href^="#"] { position: relative; top: -0.3em; font-size: 0.75em; margin-left: 0.3em; text-decoration: none; }
+    a[href^="#"]::before { content: "["; }
+    a[href^="#"]::after { content: "]"; }
+    *, *::before, *::after { box-sizing: border-box; }
+    h1 { font-size: 1.5em; margin: 0.67em 0; }
+    article > h1 { font-size: 2em; margin: 0.67em 0; }
+    article { width: min(39em, 100%); }
+    h2::before { counter-increment: section; content: counter(section) ". "; }
+    pre { background: #eee; padding: 1rem; max-width: 100%; overflow: auto; }
+    code { background: #eee; font-size: 0.8em; }
+    p code { padding: 0 0.5rem; }
+    img { max-width: min(100rem, 100%); height: auto; }
+    video { max-width: min(50rem, 100%); height: auto; padding: 1rem; background-image: url("/images/transparent.png"); background-size: cover; background-position: top left; }
+    hr { margin: 3rem 0; }
+    .smol { font-size: 1rem; }
+    .emoji { font-style: normal; }
+    .zalgo { margin: 3em 0; font-family: sans-serif; }
+    .zalgo.code { margin: 0; font-size: 1.5em; letter-spacing: 5px; }
+    .zalgo.code > code { font-family: sans-serif; }
+    .bigchar { font-size: 3em; }
+    blockquote { font-style: italic; }
+    blockquote:before { content: open-quote; }
+    blockquote:after { content: close-quote; }
+</style>
+</head>
+
+<body>
+<main>
+<article>
+<h1>Split Text and the Vanishing Kerning</h1>
+<p></p>
+<p>
+    So we ran into a little problem recently. For the new incarnation of our website, we were
+    experimenting with text effects on headlines. They should have the glyphs of certain
+    characters animated, some automatically, some on hover. A new font was created, and we
+    discussed how to best implement this. We floated the idea of replacing characters with
+    <a href="https://lottiefiles.com/" target="_blank">Lottie</a> animations,
+    but soon dismissed it in favor of using
+    <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_fonts/Variable_fonts_guide" target="_blank">variable fonts</a>.
+</p>
+<p>
+    Glyph animations could be baked right into the font, we could also have multiple
+    animations per glyph, or even multiple glyphs per character. Screenreaders and search engine
+    crawlers would just see the plain text. I'd wrap each character in a span, apply some CSS
+    and be done.
+    Perfect!
+</p>
+<p>
+    And we got to work. Andy, our Creative Director, worked on the variable font, and I wrote
+    a little web tool that allowed him to preview his work, by selecting various features and
+    animating any available axis of the variable font for each character.
+</p>
+<p>
+    One day Andy slacked me:
+    <blockquote>
+        Here is the latest version of the font with the kerning and animations in. One thing
+        that is strange is that when I start the animation with it, the letters jump out
+        (possibly losing their kerning?). Any thoughts?
+    </blockquote>
+    I had noticed that too, but first assumed it was some weird bug in my code or something.
+</p>
+<p>
+    Turns out, <strong>browsers nope out of kerning as soon as adjacent characters have different
+    font styles applied to them</strong>. That's Chrome and Firefox. Safari nopes out no matter
+    what<a href="#footnote1" aria-label="Footnote 1">1</a>.
+    And it makes sense.
+    If you have a character pair where one of them is <code>1em</code> high and the other
+    <code>3em</code>, what kerning value should the browser apply?
+</p>
+<p>
+    In practice this means that even for an inconspicious
+    <code>&lt;span>Hello &lt;b>World&lt;/b>!&lt;/span></code>,
+    browsers won't apply kerning on the character pairs
+    <code>(space)</code>/<code>W</code>
+    and
+    <code>d</code>/<code>!</code>,
+    because the <code>World</code> is bold and the rest is not.
+    Different font styles, no kerning. And Safari won't even try.
+</p>
+<p>
+    That becomes a real problem when using text splitters like
+    <a href="https://gsap.com/docs/v3/Plugins/SplitText/" target="_blank">GSAP's SplitText</a>.
+    In <a href="https://codepen.io/GreenSock/pen/pEKYVz">this official GSAP SplitText demo</a>,
+    first click the "chars" button, and then the "revert" button. The former splits the text and
+    kerning is lost. The latter restores the original markup and kerning is applied again.
+</p>
+<p>
+    Poor Andy.
+    <blockquote>
+        So much for that week of setting all the kerning. Over 1,200 kerning pairs
+        <span class="emoji">🫠</span>
+    </blockquote>
+</p>
+<p>
+    I had to find a way.
+</p>
+
+<h2>Intermission</h2>
+    Before we even start, we have to look into how to split a string of text into individual
+    characters in JavaScript. You might think that this is trivial, but oh lordy.
+</p>
+<p>
+    Here's some <a href="https://en.wikipedia.org/wiki/Zalgo_text" target="_blank">Zalgo</a> for you:
+</p>
+<p class="zalgo">
+    C̵̫̖͚̗̣͖͚̦͋̆̈́͊̌̒͌r̸̥̯͂͂̆̐̎̋̀ͅa̸̳̜̠̹̪͈͐̅͂z̵̨̨̡̧̡̫̙̥͎͊̓̏̿͆̑̇̀͝y̶͙̦̰͎̓̐̓̎͘͜
+</p>
+<p>
+    That's the word "Crazy" with a whole bunch of
+    <a href="https://en.wikipedia.org/wiki/Diacritic" target="_blank">diacritics</a>
+    added to it. It's five characters, but the <code>.length</code> of that string is <code>72</code>.
+    Here's what you get when you split that string with <code>.split('')</code>
+    (i added line breaks for readability, and spaces for it not to collapse back into Zalgo):
+</p>
+<p class="zalgo code">
+    <code>C ̵ ͋ ̆ ̈́ ͊ ̌ ̒ ͌ ̫ ̖ ͚ ̗ ̣ ͖ ͚ ̦ </code><br>
+    <code>r ̸ ͂ ͂ ̆ ̐ ̎ ̋ ̀ ̥ ͅ ̯ </code><br>
+    <code>a ̸ ͐ ̅ ͂ ̳ ̜ ̠ ̹ ̪ ͈ </code><br>
+    <code>z ̵ ͊ ̓ ̏ ̿ ͝ ͆ ̑ ̇ ̀ ̫ ̨ ̨ ̙ ̥ ̡ ̧ ̡ ͎ </code><br>
+    <code>y ̶ ̓ ̐ ͘ ̓ ̎ ͜ ͙ ̦ ̰ ͎</code>
+</p>
+<p>
+    If you look at the source code of this webpage in a hex editor (as completely normal people
+    do for fun) you'll see this:
+</p>
+<p>
+    <img src="zalgo-hex.png" width="560" height="auto" alt="" />
+</p>
+<p>
+    That's 139 bytes! Wasn't it 72? What the heck is going on? Those are different encodings.
+    The source code of this website is encoded in UTF-8, and Javascript uses UTF-16 internally.
+</p>
+<p>
+    Ok you probably don't care much about Zalgo, so let's step a bit back and look at a
+    simpler example.
+</p>
+<p>
+    <span class="bigchar">💩</span>
+</p>
+<p>
+    <code>"💩".length</code> → <code>2</code><br>
+    <code>"💩".split('')</code> → <code>['\uD83D', '\uDCA9']</code><br>
+    <code>[..."💩"].length</code> → <code>1</code><br>
+    <code>[..."💩"]</code> → <code>['💩']</code><br>
+</p>
+<p>
+    That's the Unicode symbol "U+1F4A9 PILE OF POO". Like all emoji, it's defined all the way
+    up there in the Unicode supplementary planes (aka "astral planes"), meaning it's not part
+    of the basic multilingual plane (BMP) and needs more than 2 bytes (or 16 bits) to be encoded.
+    Javascript internally uses UTF-16, and thus needs two 16-bit code units to represent that
+    character: <code>\uD83D</code> and <code>\uDCA9</code>.
+</p>
+<p>
+    So there goes <code>.split('')</code>. It doesn't work here. In fact, most if not all of
+    Javascript's String methods won't handle astral plane characters correctly.
+    Luckily, in this case <code>Array.from("💩")</code> and the spread operator <code>[..."💩"]</code>,
+    both introduced in ES6, do a good job.
+</p>
+<p>
+    Takeaway: Only use <code>.split('')</code> if you are 100% certain that all strings you'll
+    ever want to split will only contain characters from the BMP.
+</p>
+<p>
+    We're not done yet, though. Let's look at another example:
+</p>
+<p>
+    <code class="bigchar">&#x00E9;</code>
+    <code class="bigchar">&#x0065;&#x0301;</code>
+</p>
+<p>
+    That's two "e" characters with
+    <a href="https://en.wikipedia.org/wiki/Acute_accent" target="_blank">acute accents</a>.
+    As in "café". The French use them a lot.
+</p>
+<p>
+    The two are semantically the same letter, but here they are encoded differently.
+    Both versions are perfectly valid:
+</p>
+<p>
+    <code>"é".length</code> → <code>1</code><br>
+    <code>"é".split('').map(c => c.codePointAt().toString(16))</code> → <code>['e9']</code><br>
+</p>
+<p>
+    <code>"é".length</code> → <code>2</code><br>
+    <code>"é".split('').map(c => c.codePointAt().toString(16))</code> → <code>['65', '301']</code><br>
+</p>
+<p>
+    Again, <code>.split('')</code> doesn't work here. It splits the string into two characters,
+    <code>"e"</code> and U+0301 COMBINING ACUTE ACCENT. Not even Array destructuring
+    works here. It still splits the string into two characters:
+</p>
+<p>
+    <code>[..."é"].length</code> → <code>2</code><br>
+    <code>[..."é"].map(c => c.codePointAt().toString(16))</code> → <code>['65', '301']</code><br>
+</p>
+<p>
+    What we can do though is convert the second version to the first one, using
+    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/normalize" target="_blank">normalize()</a>:
+</p>
+<p>
+    <code>[..."é".normalize('NFC')].length</code> → <code>1</code><br>
+    <code>[..."é".normalize('NFC')]</code> → <code>['é']</code><br>
+</p>
+<p>
+    We could be done here and just use Array destructuring after normalization, but there's
+    another problem. Let's look at this:
+</p>
+<p>
+    <span class="bigchar">🏳️‍🌈</span>
+</p>
+<p>
+    <code>[..."🏳️‍🌈"]</code> → <code>['🏳', '', '', '🌈']</code><br>
+    <code>[..."🏳️‍🌈"].map(c => c.codePointAt().toString(16))</code><br>
+    → <code>['1f3f3', 'fe0f', '200d', '1f308']</code><br>
+</p>
+<p>
+    What we have here are four Unicode symbols:
+    <ul>
+        <li>the Unicode symbol U+1F3F3 WAVING WHITE FLAG</li>
+        <li><a href="https://en.wikipedia.org/wiki/Variation_Selectors_(Unicode_block)" target="_blank">variation selector</a> U+FE0F</li>
+        <li><a href="https://en.wikipedia.org/wiki/Zero-width_joiner" target="_blank">zero-width joiner</a> (ZWJ) U+200D</li>
+        <li>the Unicode symbol U+1F308 RAINBOW</li>
+    </ul>
+    That's two emoji combined into one with a zero-width joiner.
+</p>
+<p>
+    The family emoji <span class="emoji">👩‍👩‍👧‍👧</span> is another example of this. That's four emoji
+    combined into one with a zero-width joiner. And there are many more of those.
+</p>
+<p>
+    The only way we can split this natively into individual "characters" is by using
+    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter" target="_blank">Intl.Segmenter</a>:
+</p>
+<pre><code>const segmenter = new Intl.Segmenter('en', { granularity: 'grapheme' });
+Array.from(segmenter.segment('🏳️‍🌈'), ({ segment }) => segment)
+→ ['🏳️‍🌈']</code></pre>
+<p>
+    This splits anything we throw at it into individual graphemes, which is what we want.
+    Bonus: You can also split strings into words or sentences.
+</p>
+<p>
+    Small problem: Intl.Segmenter is not supported in Firefox at the time of writing this.
+    There is a polyfill, but it's a giant WASM thing, way too big for our casual client-side
+    character splitting needs. So we'll have to wait for Firefox to catch up.
+</p>
+<p>
+    <img src="caniuse-intl-segmenter.png" width="661" height="auto" alt="" />
+</p>
+<p>
+    There is <a href="https://github.com/flmnt/graphemer" target="_blank">Graphemer</a> though,
+    a library that does splitting on graphemes. It's roughly 15kb minified and compressed, which
+    is still a bit much, but it's better than megabytes.
+</p>
+<h3>TL;DR</h3>
+<p>
+    If you need to support joined emoji, use
+    <a href="https://github.com/flmnt/graphemer" target="_blank">Graphemer</a>,
+    or
+    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter" target="_blank">Intl.Segmenter</a>
+    once it's available in Firefox.
+</p>
+<p>
+    For most cases, <code>[...string.normalize('NFC')]</code> is a good solution.
+    My split text library is going to use that by default, allowing you to pass in
+    a custom splitter function if you like to use Graphemer, Intl.Segmenter or anything else.
+</p>
+</article>
+
+<hr>
+
+<footer>
+    <header>
+        <h1>Footnotes</h1>
+    </header>
+    <ol>
+        <li id="footnote1">
+            <i>
+                Safari doesn't even
+                <a href="https://codepen.io/claus/pen/eYxBLwJ" target="_blank">apply kerning to characters in two adjacent text nodes</a>.
+            </i>
+        </li>
+    </ol>
+</footer>
+
+<hr>
+
+<aside>
+    <header>
+        <h1>Metadata</h1>
+    </header>
+    <p>
+        All the words above were written (and the screenshots screenshot) on April 11th, 2023 without the help of any AIs, and are licensed under the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a> unless otherwise stated.
+        This website does not track you. The source code of this website is available on <a href="https://github.com/claus/theclausclauses" target="_self">Github</a>.
+        Please direct your complaints at <a href="https://mastodon.com.br/@claus" target="_self">@claus@mastodon.com.br</a> or <a href="https://chaos.social/@claus" target="_self">@claus@chaos.social</a>. If that doesn't work for you, you can go oldschool and email me at <a href="mailto:w@hle.rs">w@hle.rs</a>.
+        Here's a RSS feed: <a href="/rss.xml" aria-label="Link to RSS Feed"><img class="rss" src="/images/rss.svg" aria-hidden /></a>
+    </p>
+</aside>
+
+</main>
+
+<hr>
+
+<footer>← <a href="/" target="_self">back to index</a></footer>
+</body>
+</html>
