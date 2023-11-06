@@ -41,7 +41,6 @@
 <body>
 <main>
 <article>
-<section>
 <h1>Split Text and the Vanishing Kerning</h1>
 <p>
     So we ran into a little problem recently. For the new incarnation of our website, we were
@@ -109,7 +108,9 @@
     I had to find a way.
 </p>
 
-<h2>Intermission</h2>
+<section>
+<h2 id="intermission">Intermission</h2>
+<p>
     Before we even start, we have to look into how to split a string of text into individual
     characters in JavaScript. You might think that this is trivial, but oh lordy.
 </p>
@@ -134,15 +135,7 @@
     <code>y ̶ ̓ ̐ ͘ ̓ ̎ ͜ ͙ ̦ ̰ ͎</code>
 </p>
 <p>
-    If you look at the source code of this webpage in a hex editor (as completely normal people
-    do for fun) you'll see this:
-</p>
-<p>
-    <img src="zalgo-hex.png" width="560" height="auto" alt="" />
-</p>
-<p>
-    That's 139 bytes! Wasn't it 72? What the heck is going on? Those are different encodings.
-    The source code of this website is encoded in UTF-8, and Javascript uses UTF-16 internally.
+    <code>.split('')</code> clearly doesn't work with Zalgo.
 </p>
 <p>
     Ok you probably don't care much about Zalgo, so let's step a bit back and look at a
@@ -232,7 +225,7 @@
     <ul>
         <li>the Unicode symbol U+1F3F3 WAVING WHITE FLAG</li>
         <li><a href="https://en.wikipedia.org/wiki/Variation_Selectors_(Unicode_block)" target="_blank">variation selector</a> U+FE0F</li>
-        <li><a href="https://en.wikipedia.org/wiki/Zero-width_joiner" target="_blank">zero-width joiner</a> (ZWJ) U+200D</li>
+        <li><a href="https://en.wikipedia.org/wiki/Zero-width_joiner" target="_blank">zero-width joiner</a> U+200D</li>
         <li>the Unicode symbol U+1F308 RAINBOW</li>
     </ul>
     That's two emoji combined into one with a zero-width joiner.
@@ -253,19 +246,20 @@ Array.from(segmenter.segment('🏳️‍🌈'), ({ segment }) => segment)
     Bonus: You can also split strings into words or sentences.
 </p>
 <p>
-    Small problem: Intl.Segmenter is not supported in Firefox at the time of writing this.
-    There is a polyfill, but it's a giant WASM thing, way too big for our casual client-side
-    character splitting needs. So we'll have to wait for Firefox to catch up.
-</p>
-<p>
-    <img src="caniuse-intl-segmenter.png" width="661" height="auto" alt="" />
+    Small problem: Intl.Segmenter is
+    <a href="https://caniuse.com/mdn-javascript_builtins_intl_segmenter_segment" target="_blank">not supported in Firefox</a>
+    at the time of writing this.
+    There is a <a href="https://www.npmjs.com/package/intl-segmenter-polyfill" target="_blank">polyfill</a>,
+    but it's a giant WASM thing, way too big for our casual client-side
+    text splitting needs. So we'll have to wait for Firefox to catch up.
 </p>
 <p>
     There is <a href="https://github.com/flmnt/graphemer" target="_blank">Graphemer</a> though,
     a library that does splitting on graphemes. It's roughly 15kb minified and compressed, which
     is still a bit much, but it's better than megabytes.
 </p>
-<h3>TL;DR</h3>
+
+<h3 id="intermission-tldr">TL;DR</h3>
 <p>
     If you need to support joined emoji, use
     <a href="https://github.com/flmnt/graphemer" target="_blank">Graphemer</a>,
@@ -279,6 +273,7 @@ Array.from(segmenter.segment('🏳️‍🌈'), ({ segment }) => segment)
     a custom splitter function if you like to use Graphemer, Intl.Segmenter or anything else.
 </p>
 </section>
+
 </article>
 
 <hr>
@@ -304,7 +299,7 @@ Array.from(segmenter.segment('🏳️‍🌈'), ({ segment }) => segment)
         <h1>Metadata</h1>
     </header>
     <p>
-        All the words above were written (and the screenshots screenshot) on April 11th, 2023 without the help of any AIs, and are licensed under the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a> unless otherwise stated.
+        All the words above were written (and the screenshots screenshot) on XXXXXX NNth, 2023 without the help of any AIs, and are licensed under the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a> unless otherwise stated.
         This website does not track you. The source code of this website is available on <a href="https://github.com/claus/theclausclauses" target="_self">Github</a>.
         Please direct your complaints at <a href="https://mastodon.com.br/@claus" target="_self">@claus@mastodon.com.br</a> or <a href="https://chaos.social/@claus" target="_self">@claus@chaos.social</a>. If that doesn't work for you, you can go oldschool and email me at <a href="mailto:w@hle.rs">w@hle.rs</a>.
         Here's a RSS feed: <a href="/rss.xml" aria-label="Link to RSS Feed"><img class="rss" src="/images/rss.svg" aria-hidden /></a>
