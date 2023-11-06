@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <title>Split Text and the Vanishing Kerning</title>
+<base href="https://theclausclauses.com/stuff/split-text-and-the-vanishing-kerning/" target="_blank">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="description" content="">
 <meta property="og:title" content="Split Text and the Vanishing Kerning">
@@ -40,8 +41,8 @@
 <body>
 <main>
 <article>
+<section>
 <h1>Split Text and the Vanishing Kerning</h1>
-<p></p>
 <p>
     So we ran into a little problem recently. For the new incarnation of our website, we were
     experimenting with text effects on headlines. They should have the glyphs of certain
@@ -137,7 +138,7 @@
     do for fun) you'll see this:
 </p>
 <p>
-    <img src="./zalgo-hex.png" width="560" height="auto" alt="" />
+    <img src="zalgo-hex.png" width="560" height="auto" alt="" />
 </p>
 <p>
     That's 139 bytes! Wasn't it 72? What the heck is going on? Those are different encodings.
@@ -257,7 +258,7 @@ Array.from(segmenter.segment('🏳️‍🌈'), ({ segment }) => segment)
     character splitting needs. So we'll have to wait for Firefox to catch up.
 </p>
 <p>
-    <img src="./caniuse-intl-segmenter.png" width="661" height="auto" alt="" />
+    <img src="caniuse-intl-segmenter.png" width="661" height="auto" alt="" />
 </p>
 <p>
     There is <a href="https://github.com/flmnt/graphemer" target="_blank">Graphemer</a> though,
@@ -277,6 +278,7 @@ Array.from(segmenter.segment('🏳️‍🌈'), ({ segment }) => segment)
     My split text library is going to use that by default, allowing you to pass in
     a custom splitter function if you like to use Graphemer, Intl.Segmenter or anything else.
 </p>
+</section>
 </article>
 
 <hr>
