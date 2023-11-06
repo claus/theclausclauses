@@ -140,11 +140,11 @@
     <code>y ̶ ̓ ̐ ͘ ̓ ̎ ͜ ͙ ̦ ̰ ͎</code>
 </p>
 <p>
-    <code>.split('')</code> clearly doesn't work with Zalgo.
+    So, <code>.split('')</code> clearly doesn't work for splitting Zalgo. But i hear you.
+    You probably don't care much about Zalgo.
 </p>
 <p>
-    Ok you probably don't care much about Zalgo, so let's take a step back and look at a
-    simpler example.
+    So let's take a step back and look at a simpler example:
 </p>
 <p>
     <span class="bigchar">💩</span>
@@ -264,10 +264,15 @@
 </p>
 <pre><code>const segmenter = new Intl.Segmenter('en', { granularity: 'grapheme' });
 const chars = Array.from(segmenter.segment('🏳️‍🌈'), ({ segment }) => segment)
+console.log(chars);
 → ['🏳️‍🌈']</code></pre>
 <p>
-    This splits anything we throw at it into individual graphemes, which is what we want.
-    Bonus: You can also split strings into words or sentences.
+    This splits anything we throw at it into
+    <a href="https://stackoverflow.com/questions/27331819/whats-the-difference-between-a-character-a-code-point-a-glyph-and-a-grapheme" target="_blank">graphemes</a>,
+    which is what we want.
+</p>
+<p>
+    Bonus: It can also split strings into words or sentences.
 </p>
 <p>
     Small problem: Intl.Segmenter is
@@ -285,16 +290,16 @@ const chars = Array.from(segmenter.segment('🏳️‍🌈'), ({ segment }) => s
 
 <h3 id="intermission-tldr">TL;DR</h3>
 <p>
-    If you need to support joined emoji, use
-    <a href="https://github.com/flmnt/graphemer" target="_blank">Graphemer</a>,
-    or
+    If you need to support joined Unicode symbols, use
+    <a href="https://github.com/flmnt/graphemer" target="_blank">Graphemer</a>
+    (or
     <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter" target="_blank">Intl.Segmenter</a>
-    once it's available in Firefox.
+    once it's available in Firefox).
 </p>
 <p>
-    For most cases, <code>[...string.normalize('NFC')]</code> is a good solution.
+    Otherwise, <code>[...string.normalize('NFC')]</code> is a good solution.
     My split text library is going to use that by default, allowing you to pass in
-    a custom splitter function if you like to use Graphemer, Intl.Segmenter or anything else.
+    a custom splitter function if you need to use Graphemer, Intl.Segmenter or anything else.
 </p>
 </section>
 
