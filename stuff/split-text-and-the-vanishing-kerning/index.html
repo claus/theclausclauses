@@ -18,6 +18,9 @@
     h1 { font-size: 1.5em; margin: 0.67em 0; }
     article > h1 { font-size: 2em; margin: 0.67em 0; }
     article { width: min(39em, 100%); }
+    section aside { padding: 1em; border: 1px dashed #888; }
+    section aside p { margin: 0; }
+    section aside p:not(:last-child) { margin: 0 0 0.5em; }
     h2::before { counter-increment: section; content: counter(section) ". "; }
     pre { background: #eee; padding: 1rem; max-width: 100%; overflow: auto; }
     code { background: #eee; font-size: 0.8em; }
@@ -140,7 +143,7 @@
     <code>.split('')</code> clearly doesn't work with Zalgo.
 </p>
 <p>
-    Ok you probably don't care much about Zalgo, so let's step a bit back and look at a
+    Ok you probably don't care much about Zalgo, so let's take a step back and look at a
     simpler example.
 </p>
 <p>
@@ -159,15 +162,34 @@
     Javascript internally uses UTF-16, and thus needs two 16-bit code units to represent that
     character: <code>\uD83D</code> and <code>\uDCA9</code>.
 </p>
+<aside>
+    These 16-bit codes are called <a href="https://en.wikipedia.org/wiki/UTF-16" target="_blank">surrogate pairs</a>.
+    They are used to encode characters that need more than 16 bits. The first 16-bit character
+    is called the <a href="https://en.wikipedia.org/wiki/High_surrogate" target="_blank">high surrogate</a>,
+    the second one the <a href="https://en.wikipedia.org/wiki/Low_surrogate" target="_blank">low surrogate</a>.
+    The high surrogate is always in the range <code>0xD800</code> to <code>0xDBFF</code>,
+    the low surrogate is always in the range <code>0xDC00</code> to <code>0xDFFF</code>.
+</aside>
 <p>
     So there goes <code>.split('')</code>. It doesn't work here. In fact, most if not all of
     Javascript's String methods won't handle astral plane characters correctly.
-    Luckily, in this case <code>Array.from("💩")</code> and the spread operator <code>[..."💩"]</code>,
-    both introduced in ES6, do a good job.
+    Luckily, in this case <code>Array.from("💩")</code> and the spread operator <code>[..."💩"]</code>
+    (both introduced in ES6) do a good job, they natively support Unicode symbols in higher
+    planes.
 </p>
+<aside>
+    <p>
+        ES6 introduced unicode aware regular expressions as well, so you could also do
+        <code>"💩".match(/./ug)</code> (note the <code>/u</code> flag).
+    </p>
+    <p>
+        To <em>create</em> a string with Unicode symbols from the astral planes, you can use
+        Unicode escape sequences, also introduced in ES6: <code>"\u{1F4A9}"</code>.
+    </p>
+</aside>
 <p>
     Takeaway: Only use <code>.split('')</code> if you are 100% certain that all strings you'll
-    ever want to split will only contain characters from the BMP.
+    ever want to split will only contain non-combined characters from the BMP. Otherwise, stay away!
 </p>
 <p>
     We're not done yet, though. Let's look at another example:
@@ -241,7 +263,7 @@
     <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter" target="_blank">Intl.Segmenter</a>:
 </p>
 <pre><code>const segmenter = new Intl.Segmenter('en', { granularity: 'grapheme' });
-Array.from(segmenter.segment('🏳️‍🌈'), ({ segment }) => segment)
+const chars = Array.from(segmenter.segment('🏳️‍🌈'), ({ segment }) => segment)
 → ['🏳️‍🌈']</code></pre>
 <p>
     This splits anything we throw at it into individual graphemes, which is what we want.
