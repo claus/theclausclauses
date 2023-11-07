@@ -227,8 +227,9 @@
     <code>[..."é"].map(c => c.codePointAt().toString(16))</code> → <code>['65', '301']</code><br>
 </p>
 <p>
-    What we can do though is convert the second version to the first one, using
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/normalize" target="_blank">normalize()</a>:
+    What we can do, however, is convert the second version to the first one using
+    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/normalize" target="_blank">normalize()</a>
+    before we proceed with destructuring:
 </p>
 <p>
     <code>[..."é".normalize('NFC')].length</code> → <code>1</code><br>
@@ -339,8 +340,8 @@ console.log(chars);
     <p>
         All the words above were written (and the screenshots screenshot) on XXXXXX NNth, 2023 without the help of any AIs, and are licensed under the <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">Creative Commons Attribution 4.0 International license</a> unless otherwise stated.
         This website does not track you. The source code of this website is available on <a href="https://github.com/claus/theclausclauses" target="_self">Github</a>.
-        Please direct your complaints at <a href="https://mastodon.com.br/@claus">@claus@mastodon.com.br</a> or <a href="https://chaos.social/@claus">@claus@chaos.social</a>. If that doesn't work for you, you can go oldschool and email me at <a href="mailto:w@hle.rs">w@hle.rs</a>.
-        Here's a RSS feed: <a href="/rss.xml" aria-label="Link to RSS Feed" target="_blank"><img class="rss" width="16" height="16" src="/images/rss.svg" aria-hidden alt="" /></a>
+        Please direct your complaints at <a href="https://mastodon.com.br/@claus">@claus@mastodon.com.br</a> or <a href="https://chaos.social/@claus">@claus@chaos.social</a>. If that doesn't work, you can email me at <a href="mailto:w@hle.rs">w@hle.rs</a>.
+        Here's a RSS feed, please like and subscribe: <a href="/rss.xml" aria-label="Link to RSS Feed" target="_blank"><img class="rss" width="16" height="16" src="/images/rss.svg" aria-hidden alt="" /></a>
     </p>
 </aside>
 
@@ -348,6 +349,6 @@ console.log(chars);
 
 <hr>
 
-<footer>← <a href="/" target="_self">back to index</a></footer>
+<footer>← <a href="/" target="_self">more stuff here</a></footer>
 </body>
 </html>
